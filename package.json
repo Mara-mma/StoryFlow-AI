@@ -1,0 +1,16 @@
+{
+  "name": "storyflow-ai",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently -n web,api -c cyan,green \"npm run dev:web\" \"npm run dev:api\"",
+    "dev:web": "cd apps/web && npm run dev",
+    "dev:api": "cd apps/api && npm run start:dev",
+    "build": "cd apps/web && npm run build",
+    "build:api": "cd apps/api && npm run build",
+    "install:all": "cd apps/web && npm install && cd ../api && npm install"
+  },
+  "devDependencies": {
+    "concurrently": "^9.1.0"
+  }
+}

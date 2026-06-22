@@ -1,0 +1,71 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider  = "postgresql"
+  url       = env("DATABASE_URL")
+  directUrl = env("DIRECT_URL")
+}
+
+model User {
+  id           String   @id @default(uuid())
+  name         String
+  email        String   @unique
+  passwordHash String   @map("password_hash")
+  createdAt    DateTime @default(now()) @map("created_at")
+  stories      Story[]
+
+  @@map("users")
+}
+
+model Story {
+  id              String      @id @default(uuid())
+  userId          String?     @map("user_id")
+  title           String
+  genre           String
+  culturalSetting String      @map("cultural_setting")
+  conflict        String
+  tone            String
+  language        String      @default("en")
+  sceneCount      Int         @map("scene_count")
+  storyIdea       String?     @map("story_idea")
+  additionalNotes String?     @map("additional_notes")
+  moral           String?
+  createdAt       DateTime    @default(now()) @map("created_at")
+
+  user            User?       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  character       Character?
+  scenes          Scene[]
+
+  @@map("stories")
+}
+
+model Character {
+  id              String @id @default(uuid())
+  storyId         String @unique @map("story_id")
+  name            String
+  appearance      String
+  personality     String
+  motivation      String
+  role            String
+  culturalContext String @map("cultural_context")
+
+  story           Story  @relation(fields: [storyId], references: [id], onDelete: Cascade)
+
+  @@map("characters")
+}
+
+model Scene {
+  id          String @id @default(uuid())
+  storyId     String @map("story_id")
+  sceneNumber Int    @map("scene_number")
+  setting     String
+  action      String
+  dialogue    String
+  voiceover   String
+
+  story       Story  @relation(fields: [storyId], references: [id], onDelete: Cascade)
+
+  @@map("scenes")
+}
