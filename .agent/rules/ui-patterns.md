@@ -89,23 +89,35 @@ Navbar
 │   │   ├── Cultural Setting (select)
 │   │   ├── Conflict Type (select)
 │   │   ├── Tone (select)
-│   │   └── Scene Count (select)
+│   │   └── Story Duration (hybrid component)
+│   │       ├── Quick-select buttons: 30s / 1 min / 2 mins / 3 mins
+│   │       └── Custom input: number field (min 3, max 20) with auto duration label
 │   ├── [Advanced only] Story Idea (textarea)
 │   ├── [Advanced only] Additional Instructions (textarea)
 │   └── [Preview Blueprint →] button
 │
 ├── STEP 2: Blueprint Preview
-│   ├── Blueprint Card (see design-system.md)
+│   ├── Blueprint Card showing Duration label (not raw scene count)
 │   ├── [← Edit Inputs] button
 │   └── [Generate Story →] button
 │
 └── STEP 3: Story Output
-    ├── Story Header (title + moral banner)
-    ├── Character Card
-    ├── Blueprint Summary Card
-    ├── Scene Cards (one per scene, in order)
-    ├── [Save Story] button → auto-save if logged in, prompt login if guest
-    └── [Generate Another] button → resets to Step 1
+    ├── Story Title
+    ├── Estimated Duration badge (e.g. "Estimated duration: 1 minute")
+    ├── Moral banner
+    ├── View Toggle: [Structured] [Script]
+    │
+    ├── STRUCTURED VIEW (default)
+    │   ├── Character card
+    │   ├── Blueprint card
+    │   └── Scene cards (SETTING, ACTION, DIALOGUE, VOICEOVER per scene)
+    │
+    └── SCRIPT VIEW
+        ├── Character intro paragraph (flowing prose)
+        ├── Scene blocks (Scene 1, Scene 2... in orange heading)
+        │   └── Setting → Action → Dialogue (screenplay format) → Narrator: voiceover (italics)
+        ├── Moral: (italics, end of script)
+        └── [Copy Script] button → copies full text, shows toast "Script copied to clipboard"
 ```
 
 ### `/library` – Story Library (Auth Protected)

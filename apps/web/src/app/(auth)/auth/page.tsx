@@ -1,41 +1,44 @@
 'use client'
 
-import { useState, FormEvent, Suspense } from 'react'
+import { useState, FormEvent, Suspense, useEffect } from 'react'
 import { useAuth } from '@/context/AuthContext'
 import { useRouter, useSearchParams } from 'next/navigation'
 
 function AuthForm() {
   const searchParams = useSearchParams()
-  const initialTab = searchParams.get('tab') === 'login' ? 'login' : 'signup'
-  const [tab, setTab] = useState<'login' | 'signup'>(initialTab)
+  const [form, setForm] = useState<'signup' | 'login'>('signup')
+
+  useEffect(() => {
+    const tab = searchParams.get('tab')
+    if (tab === 'login') setForm('login')
+    else setForm('signup')
+  }, [searchParams])
 
   return (
     <div className="min-h-[80vh] flex items-center justify-center px-4">
       <div className="bg-white dark:bg-[#111111] border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-xl p-8 w-full max-w-md">
-        <div className="flex mb-8">
-          <button
-            onClick={() => setTab('signup')}
-            className={`flex-1 pb-3 text-sm font-bold border-b-2 transition-colors ${
-              tab === 'signup'
-                ? 'text-[#FF6719] border-[#FF6719]'
-                : 'text-[#999999] dark:text-[#666666] border-transparent hover:text-[#0A0A0A] dark:hover:text-white'
-            }`}
-          >
-            Sign Up
-          </button>
-          <button
-            onClick={() => setTab('login')}
-            className={`flex-1 pb-3 text-sm font-bold border-b-2 transition-colors ${
-              tab === 'login'
-                ? 'text-[#FF6719] border-[#FF6719]'
-                : 'text-[#999999] dark:text-[#666666] border-transparent hover:text-[#0A0A0A] dark:hover:text-white'
-            }`}
-          >
-            Login
-          </button>
-        </div>
-
-        {tab === 'signup' ? <SignupForm /> : <LoginForm />}
+        {form === 'signup' ? <SignupForm /> : <LoginForm />}
+        <p className="text-sm text-[#555555] dark:text-[#A0A0A0] text-center mt-6">
+          {form === 'signup' ? (
+            <>Already have an account?{' '}
+              <span
+                onMouseDown={() => setForm('login')}
+                className="text-[#FF6719] hover:text-[#E5580E] font-semibold cursor-pointer transition-colors"
+              >
+                Sign in
+              </span>
+            </>
+          ) : (
+            <>Don&apos;t have an account?{' '}
+              <span
+                onMouseDown={() => setForm('signup')}
+                className="text-[#FF6719] hover:text-[#E5580E] font-semibold cursor-pointer transition-colors"
+              >
+                Sign up
+              </span>
+            </>
+          )}
+        </p>
       </div>
     </div>
   )
@@ -44,6 +47,7 @@ function AuthForm() {
 function LoginForm() {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [fieldErrors, setFieldErrors] = useState<{ email?: string; password?: string }>({})
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
@@ -112,7 +116,7 @@ function LoginForm() {
             type="email"
             value={email}
             onChange={(e) => { setEmail(e.target.value); if (fieldErrors.email) setFieldErrors((p) => ({ ...p, email: undefined })) }}
-            className="w-full bg-[#F7F7F8] dark:bg-[#161616] border border-[#E5E5E5] dark:border-[#2A2A2A] focus:border-[#FF6719] focus:outline-none focus:shadow-[0_0_0_3px_rgba(255,103,25,0.15)] text-[#0A0A0A] dark:text-white rounded-lg px-3 py-2.5 text-sm transition-colors"
+            className="w-full bg-[#F7F7F8] dark:bg-[#161616] border border-[#E5E5E5] dark:border-[#2A2A2A] focus:border-[#FF6719] focus:outline-none focus:shadow-[0_0_0_3px_rgba(255,103,25,0.15)] dark:focus:shadow-[0_0_0_3px_rgba(255,103,25,0.35)] text-[#0A0A0A] dark:text-white rounded-lg px-3 py-2.5 text-sm transition-colors"
             placeholder="you@example.com"
           />
           {fieldErrors.email && <p className="text-xs text-[#DC2626]">{fieldErrors.email}</p>}
@@ -122,13 +126,33 @@ function LoginForm() {
           <label className="text-xs font-medium text-[#999999] dark:text-[#666666] uppercase tracking-widest">
               Enter Password
             </label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => { setPassword(e.target.value); if (fieldErrors.password) setFieldErrors((p) => ({ ...p, password: undefined })) }}
-            className="w-full bg-[#F7F7F8] dark:bg-[#161616] border border-[#E5E5E5] dark:border-[#2A2A2A] focus:border-[#FF6719] focus:outline-none focus:shadow-[0_0_0_3px_rgba(255,103,25,0.15)] text-[#0A0A0A] dark:text-white rounded-lg px-3 py-2.5 text-sm transition-colors"
-            placeholder="••••••••"
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={(e) => { setPassword(e.target.value); if (fieldErrors.password) setFieldErrors((p) => ({ ...p, password: undefined })) }}
+              className="w-full bg-[#F7F7F8] dark:bg-[#161616] border border-[#E5E5E5] dark:border-[#2A2A2A] focus:border-[#FF6719] focus:outline-none focus:shadow-[0_0_0_3px_rgba(255,103,25,0.15)] dark:focus:shadow-[0_0_0_3px_rgba(255,103,25,0.35)] text-[#0A0A0A] dark:text-white rounded-lg px-3 py-2.5 pr-10 text-sm transition-colors"
+              placeholder="••••••••"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#999999] dark:text-[#666666] hover:text-[#0A0A0A] dark:hover:text-white transition-colors"
+            >
+              {showPassword ? (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
+                  <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
+                  <line x1="1" y1="1" x2="23" y2="23" />
+                </svg>
+              ) : (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              )}
+            </button>
+          </div>
           {fieldErrors.password && <p className="text-xs text-[#DC2626]">{fieldErrors.password}</p>}
         </div>
 
@@ -148,6 +172,7 @@ function SignupForm() {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [showPassword, setShowPassword] = useState(false)
   const [fieldErrors, setFieldErrors] = useState<{ name?: string; email?: string; password?: string }>({})
   const [error, setError] = useState<string | null>(null)
   const [loading, setLoading] = useState(false)
@@ -244,8 +269,7 @@ function SignupForm() {
               value={name}
               onChange={(e) => { setName(e.target.value); if (fieldErrors.name) setFieldErrors((p) => ({ ...p, name: undefined })) }}
               onBlur={handleNameBlur}
-              autoFocus
-              className="w-full bg-[#F7F7F8] dark:bg-[#161616] border border-[#E5E5E5] dark:border-[#2A2A2A] focus:border-[#FF6719] focus:outline-none focus:shadow-[0_0_0_3px_rgba(255,103,25,0.15)] text-[#0A0A0A] dark:text-white rounded-lg px-3 py-2.5 text-sm transition-colors"
+              className="w-full bg-[#F7F7F8] dark:bg-[#161616] border border-[#E5E5E5] dark:border-[#2A2A2A] focus:border-[#FF6719] focus:outline-none focus:shadow-[0_0_0_3px_rgba(255,103,25,0.15)] dark:focus:shadow-[0_0_0_3px_rgba(255,103,25,0.35)] text-[#0A0A0A] dark:text-white rounded-lg px-3 py-2.5 text-sm transition-colors"
               placeholder="Your name"
           />
           {fieldErrors.name && <p className="text-xs text-[#DC2626]">{fieldErrors.name}</p>}
@@ -260,7 +284,7 @@ function SignupForm() {
             value={email}
             onChange={(e) => handleEmailChange(e.target.value)}
             onBlur={handleEmailBlur}
-            className="w-full bg-[#F7F7F8] dark:bg-[#161616] border border-[#E5E5E5] dark:border-[#2A2A2A] focus:border-[#FF6719] focus:outline-none focus:shadow-[0_0_0_3px_rgba(255,103,25,0.15)] text-[#0A0A0A] dark:text-white rounded-lg px-3 py-2.5 text-sm transition-colors"
+            className="w-full bg-[#F7F7F8] dark:bg-[#161616] border border-[#E5E5E5] dark:border-[#2A2A2A] focus:border-[#FF6719] focus:outline-none focus:shadow-[0_0_0_3px_rgba(255,103,25,0.15)] dark:focus:shadow-[0_0_0_3px_rgba(255,103,25,0.35)] text-[#0A0A0A] dark:text-white rounded-lg px-3 py-2.5 text-sm transition-colors"
             placeholder="you@example.com"
           />
           {fieldErrors.email && <p className="text-xs text-[#DC2626]">{fieldErrors.email}</p>}
@@ -270,13 +294,33 @@ function SignupForm() {
           <label className="text-xs font-medium text-[#999999] dark:text-[#666666] uppercase tracking-widest">
               Enter Password
             </label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => { setPassword(e.target.value); if (fieldErrors.password) setFieldErrors((p) => ({ ...p, password: undefined })) }}
-            className="w-full bg-[#F7F7F8] dark:bg-[#161616] border border-[#E5E5E5] dark:border-[#2A2A2A] focus:border-[#FF6719] focus:outline-none focus:shadow-[0_0_0_3px_rgba(255,103,25,0.15)] text-[#0A0A0A] dark:text-white rounded-lg px-3 py-2.5 text-sm transition-colors"
-            placeholder="Min. 8 characters"
-          />
+          <div className="relative">
+            <input
+              type={showPassword ? 'text' : 'password'}
+              value={password}
+              onChange={(e) => { setPassword(e.target.value); if (fieldErrors.password) setFieldErrors((p) => ({ ...p, password: undefined })) }}
+              className="w-full bg-[#F7F7F8] dark:bg-[#161616] border border-[#E5E5E5] dark:border-[#2A2A2A] focus:border-[#FF6719] focus:outline-none focus:shadow-[0_0_0_3px_rgba(255,103,25,0.15)] dark:focus:shadow-[0_0_0_3px_rgba(255,103,25,0.35)] text-[#0A0A0A] dark:text-white rounded-lg px-3 py-2.5 pr-10 text-sm transition-colors"
+              placeholder="Min. 8 characters"
+            />
+            <button
+              type="button"
+              onClick={() => setShowPassword(!showPassword)}
+              className="absolute right-3 top-1/2 -translate-y-1/2 text-[#999999] dark:text-[#666666] hover:text-[#0A0A0A] dark:hover:text-white transition-colors"
+            >
+              {showPassword ? (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94" />
+                  <path d="M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19" />
+                  <line x1="1" y1="1" x2="23" y2="23" />
+                </svg>
+              ) : (
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                  <circle cx="12" cy="12" r="3" />
+                </svg>
+              )}
+            </button>
+          </div>
           {fieldErrors.password && <p className="text-xs text-[#DC2626]">{fieldErrors.password}</p>}
         </div>
 

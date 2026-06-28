@@ -3,6 +3,8 @@ import {
   InternalServerErrorException,
   GatewayTimeoutException,
   ServiceUnavailableException,
+  HttpException,
+  HttpStatus,
 } from '@nestjs/common';
 import { DeepSeekService } from '../ai/deepseek.service';
 import { PrismaService } from '../prisma/prisma.service';
@@ -15,7 +17,26 @@ export class StoriesService {
     private prisma: PrismaService,
   ) {}
 
-  async generate(dto: GenerateStoryDto) {
+  async generate(dto: GenerateStoryDto, userId?: string) {
+    if (userId) {
+      const user = await this.prisma.user.findUnique({
+        where: { id: userId },
+        select: { generationCount: true, maxGenerations: true, tier: true },
+      });
+
+      if (user && user.tier === 'free' && user.generationCount >= user.maxGenerations) {
+        throw new HttpException(
+          {
+            statusCode: 402,
+            error: 'Limit Reached',
+            message: `You've used all ${user.maxGenerations} free generations. Upgrade to continue creating stories.`,
+            code: 'LIMIT_REACHED',
+          },
+          HttpStatus.PAYMENT_REQUIRED,
+        );
+      }
+    }
+
     let raw: string;
 
     try {
@@ -45,12 +66,30 @@ export class StoriesService {
           'The AI service is temporarily unavailable. Please try again.',
         );
       }
+      if (err.response?.status === 401 || err.response?.status === 403) {
+        throw new InternalServerErrorException(
+          'AI service authentication failed. Please check the API key configuration.',
+        );
+      }
+      if (!err.response) {
+        throw new InternalServerErrorException(
+          'Unable to reach the AI service. Please check your network connection and try again.',
+        );
+      }
       throw new InternalServerErrorException(
         'Story generation failed. Please try again.',
       );
     }
 
     const data = this.parseResponse(raw, dto.sceneCount);
+
+    if (userId) {
+      await this.prisma.user.update({
+        where: { id: userId },
+        data: { generationCount: { increment: 1 } },
+      });
+    }
+
     return { success: true, data };
   }
 

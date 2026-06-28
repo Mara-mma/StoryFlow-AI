@@ -42,8 +42,8 @@ interface ApiResponse<T> {
 }
 
 export const api = {
-  generateStory: (body: any) =>
-    request<ApiResponse<any>>('/stories/generate', { method: 'POST', body: JSON.stringify(body) }),
+  generateStory: (body: any, token?: string) =>
+    request<ApiResponse<any>>('/stories/generate', { method: 'POST', body: JSON.stringify(body) }, token),
 
   saveStory: (body: any, token: string) =>
     request<ApiResponse<any>>('/stories', { method: 'POST', body: JSON.stringify(body) }, token),

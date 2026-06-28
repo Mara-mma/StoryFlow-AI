@@ -23,7 +23,7 @@ Step 1: Select Inputs → Step 2: Review Blueprint → Step 3: Generated Story
 | Cultural Setting | Select | See cultural settings below |
 | Conflict Type | Select | See conflict list below |
 | Tone | Select | Serious, Lighthearted, Inspirational, Suspenseful, Humorous, Emotional |
-| Scene Count | Select | 4, 6, 8, 10, 12 |
+| Story Duration | Hybrid | Quick-select: 30s (3 scenes), 1 min (5 scenes), 2 mins (8 scenes), 3 mins (12 scenes) — OR — Custom number input (min 3, max 20) with auto estimated duration label |
 
 ### Advanced Mode (adds optional free-text fields)
 

@@ -11,6 +11,7 @@ export interface StoryInput {
   conflict: string
   tone: string
   sceneCount: number
+  durationLabel: string
   storyIdea?: string
   additionalInstructions?: string
 }

@@ -7,7 +7,7 @@ export function GuestBanner() {
         Create a free account to save your story and access it anywhere.
       </p>
       <Link
-        href="/auth?tab=signup"
+        href="/auth"
         className="bg-[#FF6719] hover:bg-[#E5580E] text-white text-sm font-semibold px-4 py-2 rounded-lg transition-colors"
       >
         Save & Sign Up

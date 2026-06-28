@@ -248,7 +248,7 @@ function PlatformCard({
   specs: string[]
 }) {
   return (
-    <div className="reveal bg-white dark:bg-[#111111] border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-2xl p-[26px] transition-all duration-300 cursor-pointer hover:border-[rgba(255,103,25,0.35)] hover:-translate-y-[5px] hover:shadow-[0_20px_50px_rgba(0,0,0,0.15)] dark:hover:shadow-[0_20px_50px_rgba(0,0,0,0.5)]">
+    <div className="reveal bg-white dark:bg-[#111111] border border-[#E5E5E5] dark:border-[#2A2A2A] rounded-2xl p-[26px] transition-all duration-300 cursor-pointer hover:-translate-y-[5px] hover:shadow-[0_8px_24px_rgba(0,0,0,0.08)] dark:hover:shadow-[0_8px_24px_rgba(0,0,0,0.25)]">
       <div className="mb-4">{logo}</div>
       <div className="text-[16px] font-bold text-[#0A0A0A] dark:text-white mb-[7px]">{name}</div>
       <div className="text-[13px] text-[#555555] dark:text-[#A0A0A0] leading-[1.65]">{desc}</div>
@@ -617,9 +617,7 @@ function CTASection() {
           Create your first story →
         </Link>
       </div>
-      <p className="text-[13px] text-[#999999] dark:text-[#666666] mt-3.5 relative z-[1]">
-        No credit card required · Free forever plan available
-      </p>
+
     </div>
   )
 }

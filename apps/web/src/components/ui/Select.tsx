@@ -21,7 +21,7 @@ export function Select({
         </label>
       )}
       <select
-        className={`w-full bg-[#F7F7F8] dark:bg-[#161616] border border-[#E5E5E5] dark:border-[#2A2A2A] focus:border-[#FF6719] dark:focus:border-[#FF6719] focus:outline-none text-[#0A0A0A] dark:text-white rounded-lg px-3 py-2.5 text-sm transition-colors appearance-none cursor-pointer ${className}`}
+        className={`w-full bg-[#F7F7F8] dark:bg-[#161616] border border-[#E5E5E5] dark:border-[#2A2A2A] focus:border-[#FF6719] dark:focus:border-[#FF6719] focus:outline-none focus:shadow-[0_0_0_3px_rgba(255,103,25,0.15)] dark:focus:shadow-[0_0_0_3px_rgba(255,103,25,0.35)] text-[#0A0A0A] dark:text-white rounded-lg px-3 py-2.5 text-sm transition-colors appearance-none cursor-pointer ${className}`}
         {...props}
       >
         <option value="" className="text-[#999999] dark:text-[#666666]">

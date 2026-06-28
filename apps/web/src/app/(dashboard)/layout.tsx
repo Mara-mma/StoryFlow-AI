@@ -1,24 +1,18 @@
 'use client'
 
-import { useAuth } from '@/context/AuthContext'
-import { useRouter } from 'next/navigation'
-import { useEffect } from 'react'
+import { DashboardSidebar } from '@/components/layout/DashboardSidebar'
 
 export default function DashboardLayout({
   children,
 }: {
   children: React.ReactNode
 }) {
-  const { isAuthenticated } = useAuth()
-  const router = useRouter()
-
-  useEffect(() => {
-    if (!isAuthenticated) {
-      router.replace('/auth')
-    }
-  }, [isAuthenticated, router])
-
-  if (!isAuthenticated) return null
-
-  return <>{children}</>
+  return (
+    <div className="flex min-h-screen">
+      <DashboardSidebar />
+      <div className="flex-1 md:ml-[260px] pt-14 md:pt-0">
+        {children}
+      </div>
+    </div>
+  )
 }

@@ -23,8 +23,8 @@ export class GenerateStoryDto {
   tone: string;
 
   @IsNumber()
-  @Min(4)
-  @Max(12)
+  @Min(3)
+  @Max(20)
   sceneCount: number;
 
   @IsOptional()

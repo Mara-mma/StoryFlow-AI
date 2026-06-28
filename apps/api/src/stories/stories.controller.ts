@@ -8,18 +8,34 @@ import {
   Query,
   UseGuards,
   Request,
+  Headers,
+  UnauthorizedException,
 } from '@nestjs/common';
+import { JwtService } from '@nestjs/jwt';
 import { StoriesService } from './stories.service';
 import { GenerateStoryDto } from './dto/generate-story.dto';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 
 @Controller('stories')
 export class StoriesController {
-  constructor(private storiesService: StoriesService) {}
+  constructor(
+    private storiesService: StoriesService,
+    private jwt: JwtService,
+  ) {}
 
   @Post('generate')
-  generate(@Body() dto: GenerateStoryDto) {
-    return this.storiesService.generate(dto);
+  async generate(
+    @Body() dto: GenerateStoryDto,
+    @Headers('authorization') auth?: string,
+  ) {
+    let userId: string | undefined;
+    if (auth?.startsWith('Bearer ')) {
+      try {
+        const payload = this.jwt.verify(auth.slice(7));
+        userId = payload.sub;
+      } catch {}
+    }
+    return this.storiesService.generate(dto, userId);
   }
 
   @UseGuards(JwtAuthGuard)
