@@ -22,14 +22,12 @@ export function Navbar() {
           </span>
         </Link>
 
-        {isLanding && !isAuthenticated && (
-          <ul className="hidden md:flex items-center gap-8 list-none">
-            <li><a href="#platforms" className="text-[#666666] dark:text-[#A8A49E] hover:text-black dark:hover:text-white text-sm font-medium no-underline transition-colors">Platforms</a></li>
-            <li><a href="#how-it-works" className="text-[#666666] dark:text-[#A8A49E] hover:text-black dark:hover:text-white text-sm font-medium no-underline transition-colors">How it works</a></li>
-            <li><a href="#features" className="text-[#666666] dark:text-[#A8A49E] hover:text-black dark:hover:text-white text-sm font-medium no-underline transition-colors">Features</a></li>
-            <li><a href="#pricing" className="text-[#666666] dark:text-[#A8A49E] hover:text-black dark:hover:text-white text-sm font-medium no-underline transition-colors">Pricing</a></li>
-          </ul>
-        )}
+        <ul className="hidden md:flex items-center gap-8 list-none">
+          <li><a href="#platforms" className="text-[#666666] dark:text-[#A8A49E] hover:text-black dark:hover:text-white text-sm font-medium no-underline transition-colors">Platforms</a></li>
+          <li><a href="#how-it-works" className="text-[#666666] dark:text-[#A8A49E] hover:text-black dark:hover:text-white text-sm font-medium no-underline transition-colors">How it works</a></li>
+          <li><a href="#features" className="text-[#666666] dark:text-[#A8A49E] hover:text-black dark:hover:text-white text-sm font-medium no-underline transition-colors">Features</a></li>
+          <li><a href="#pricing" className="text-[#666666] dark:text-[#A8A49E] hover:text-black dark:hover:text-white text-sm font-medium no-underline transition-colors">Pricing</a></li>
+        </ul>
 
         <div className="flex items-center gap-2.5">
           {isAuthenticated ? (
@@ -38,14 +36,8 @@ export function Navbar() {
                 href="/library"
                 className="text-sm text-[#666666] dark:text-[#A8A49E] hover:text-black dark:hover:text-white transition-colors font-medium no-underline"
               >
-                My Stories
+                Dashboard
               </Link>
-              <button
-                onClick={logout}
-                className="text-sm text-[#666666] dark:text-[#A8A49E] hover:text-black dark:hover:text-white transition-colors font-medium"
-              >
-                Logout
-              </button>
               <Link
                 href="/generate"
                 className="bg-[#FF6719] hover:bg-[#FF7A2E] text-white text-sm font-bold px-[18px] py-2 rounded-lg transition-all no-underline"

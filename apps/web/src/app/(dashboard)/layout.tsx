@@ -1,6 +1,7 @@
 'use client'
 
 import { DashboardSidebar } from '@/components/layout/DashboardSidebar'
+import { AuthGuard } from '@/components/layout/AuthGuard'
 
 export default function DashboardLayout({
   children,
@@ -8,11 +9,13 @@ export default function DashboardLayout({
   children: React.ReactNode
 }) {
   return (
-    <div className="flex min-h-screen">
-      <DashboardSidebar />
-      <div className="flex-1 md:ml-[260px] pt-14 md:pt-0">
-        {children}
+    <AuthGuard>
+      <div className="flex min-h-screen">
+        <DashboardSidebar />
+        <div className="flex-1 md:ml-[260px] pt-14 md:pt-0">
+          {children}
+        </div>
       </div>
-    </div>
+    </AuthGuard>
   )
 }
