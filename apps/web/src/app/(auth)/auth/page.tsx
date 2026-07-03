@@ -269,6 +269,7 @@ function SignupForm() {
               value={name}
               onChange={(e) => { setName(e.target.value); if (fieldErrors.name) setFieldErrors((p) => ({ ...p, name: undefined })) }}
               onBlur={handleNameBlur}
+              autoFocus
               className="w-full bg-[#F7F7F8] dark:bg-[#161616] border border-[#E5E5E5] dark:border-[#2A2A2A] focus:border-[#FF6719] focus:outline-none focus:shadow-[0_0_0_3px_rgba(255,103,25,0.15)] dark:focus:shadow-[0_0_0_3px_rgba(255,103,25,0.35)] text-[#0A0A0A] dark:text-white rounded-lg px-3 py-2.5 text-sm transition-colors"
               placeholder="Your name"
           />
