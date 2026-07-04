@@ -31,6 +31,11 @@ export default function LibraryPage() {
         const data = await res.json()
         setStories(data.data || [])
       } catch (err: any) {
+        if (err instanceof TypeError) {
+          setError('Connection unavailable. Start the backend to see saved stories.')
+          setStories([])
+          return
+        }
         setError(err.message || "Couldn't load your stories.")
       } finally {
         setLoading(false)

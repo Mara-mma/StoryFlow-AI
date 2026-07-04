@@ -1,9 +1,7 @@
 'use client'
 
 import Link from 'next/link'
-import { useRouter } from 'next/navigation'
 import { useEffect, useRef, useState } from 'react'
-import { useAuth } from '@/context/AuthContext'
 import { Button } from '@/components/ui/Button'
 
 function ParticlesCanvas() {
@@ -625,15 +623,6 @@ function CTASection() {
 }
 
 export default function HomePage() {
-  const { isAuthenticated } = useAuth()
-  const router = useRouter()
-
-  useEffect(() => {
-    if (isAuthenticated) {
-      router.replace('/library')
-    }
-  }, [isAuthenticated, router])
-
   useEffect(() => {
     const io = new IntersectionObserver(
       entries => {
